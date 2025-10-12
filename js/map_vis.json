@@ -1,0 +1,105 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "params": [
+    {
+      "name": "Region_selection",
+      "value": null,
+      "bind": {
+        "input": "select",
+        "element": "#region-select",
+        "options": [null, "Sydney", "Melbourne"],
+        "labels": ["Show All", "Sydney", "Melbourne"]
+      }
+    }
+  ],
+
+  "width": 800,
+  "height": 500,
+  "title": {"text": "Number of trips per city (1998 - 2016)", "fontSize": 18},
+  "projection": { "type": "equirectangular", "center": [133, -10], "scale": 900 },
+
+  "layer": [
+    {
+      "data": {
+        "url": "ne_110m.json",
+        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+      },
+      "mark": { "type": "geoshape", "fill": "#cececeff" }
+    },
+    {
+      "data": {
+        "url": "ne_110m.json",
+        "format": { "type": "topojson", "feature": "ne_110m_graticules_30" }
+      },
+      "mark": { "type": "geoshape", "fill": null, "stroke": "#9f9f9fff" }
+    },
+    {
+      "data": { "url": "data/tourism.csv" },
+      "transform": [
+        { "aggregate": [{ "op": "sum", "field": "Trips", "as": "sum_Trips" }], "groupby": ["Region"] },
+        {
+          "lookup": "Region",
+          "from": {
+            "data": { "url": "data/worldcities_au.csv" },
+            "key": "city",
+            "fields": ["lat", "lng", "country"]
+          },
+          "as": ["lat", "lon", "country"]
+        },
+        { "filter": "Region_selection == null || datum.Region == Region_selection" }
+      ],
+      "mark": { "type": "circle", "opacity": 0.9, "tooltip": true },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude":  { "field": "lat", "type": "quantitative" },
+        "size": {
+          "field": "sum_Trips",
+          "type": "quantitative",
+          "title": "Trips",
+          "scale": { "range": [30, 4000] }
+        },
+        "tooltip": [
+          { "field": "Region", "type": "nominal", "title": "City" },
+          { "field": "sum_Trips", "type": "quantitative", "title": "Trips" }
+        ]
+      }
+    },
+    {
+      "data": { "url": "data/tourism.csv" },
+      "transform": [
+        { "aggregate": [{ "op": "sum", "field": "Trips", "as": "sum_Trips" }], "groupby": ["Region"] },
+        {
+          "lookup": "Region",
+          "from": {
+            "data": { "url": "data/worldcities_au.csv" },
+            "key": "city",
+            "fields": ["lat", "lng", "country"]
+          },
+          "as": ["lat", "lon", "country"]
+        },
+        { "filter": "Region_selection == null || datum.Region == Region_selection" }
+      ],
+      "mark": { "type": "text", "dx": 8, "dy": -8, "fontSize": 12, "fontStyle": "italic" },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude":  { "field": "lat", "type": "quantitative" },
+        "text": { "field": "Region" },
+        "color": { "value": "black" },
+        "opacity": {
+          "condition": [
+            { "test": "Region_selection != null && datum.Region == Region_selection", "value": 1 },
+            { "test": "Region_selection == null && (datum.Region == 'Sydney' || datum.Region == 'Melbourne')", "value": 1 }
+          ],
+          "value": 0
+        }
+      }
+    }
+  ],
+
+  "config": {
+    "background": "#eaf5ffff",
+    "legend": { "orient": "right", "labelFontSize": 13, "titleFontSize": 12 },
+    "axis": { "labelFont": "sans-serif", "titleFont": "sans-serif" }
+  }
+}

@@ -1,0 +1,9 @@
+body { margin:0; font-family:sans-serif; background:#eaf5ff; }
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  text-align: center;
+}
+.toolbar { display:flex; gap:.5rem; align-items:center; justify-content:center; margin-bottom: 8px; }
+.vis-block { margin: 18px auto; }

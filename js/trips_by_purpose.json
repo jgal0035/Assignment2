@@ -1,0 +1,45 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "params": [
+    { "name": "Region_selection", "value": null }
+  ],
+
+  "title": { "text": "Trips by Purpose", "fontSize": 18 },
+  "width": 800,
+  "height": 320,
+
+  "data": { "url": "data/tourism.csv" },
+
+  "transform": [
+    { "filter": "Region_selection == null || datum.Region == Region_selection" }
+  ],
+
+  "mark": { "type": "bar", "tooltip": true },
+
+  "encoding": {
+    "x": {
+      "field": "Purpose",
+      "type": "nominal",
+      "title": "Purpose of trip",
+      "sort": "y"
+    },
+    "y": {
+      "aggregate": "sum",
+      "field": "Trips",
+      "type": "quantitative",
+      "title": "Trips"
+    },
+    "color": { "field": "Purpose", "type": "nominal", "legend": null },
+    
+    "tooltip": [
+      { "field": "Purpose", "type": "nominal" },
+      { "aggregate": "sum", "field": "Trips", "type": "quantitative", "title": "Trips", "format": "," }
+    ]
+  },
+
+  "config": {
+    "background": "#eaf5ffff",
+    "axis": { "labelFont": "sans-serif", "titleFont": "sans-serif" }
+  }
+}

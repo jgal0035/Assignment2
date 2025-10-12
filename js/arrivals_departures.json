@@ -1,0 +1,44 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {"text": "Overseas Arrivals and Departures (Monthly)", "fontSize": 18},
+  "width": 800,
+  "height": 500,
+
+  "data": { "url": "data/arrivalsDepartures.csv" },
+
+  "transform": [
+    { "fold": ["Arrivals (M)", "Departures (M)"], "as": ["SeriesRaw", "value"] },
+    { "calculate": "datum.SeriesRaw == 'Arrivals (M)' ? 'Arrivals' : 'Departures'", "as": "Series" },
+    { "calculate": "toNumber(datum.value)", "as": "millions" },
+    { "calculate": "utcParse(datum.date, '%b-%y')", "as": "t" },
+    { "filter": "isValid(datum.t) && isFinite(datum.millions)" }
+  ],
+
+  "layer": [
+    {
+      "mark": { "type": "line", "interpolate": "monotone", "strokeWidth": 2 },
+      "encoding": {
+        "x": { "field": "t", "type": "temporal", "title": "", "axis": { "format": "%b %Y", "labelOverlap": true } },
+        "y": { "field": "millions", "type": "quantitative", "title": "Millions" },
+        "color": { "field": "Series", "type": "nominal", "title": null },
+        "tooltip": [
+          { "field": "t", "type": "temporal", "title": "Month", "format": "%b %Y" },
+          { "field": "Series", "type": "nominal" },
+          { "field": "millions", "type": "quantitative", "title": "Value (Millions)", "format": ".2f" }
+        ]
+      }
+    },
+    {
+      "mark": { "type": "circle", "opacity": 1, "size": 0 },
+      "encoding": {
+        "color": { "field": "Series", "type": "nominal", "legend": { "orient": "bottom" } }
+      }
+    }
+  ],
+
+  "config": {
+    "background": "#eaf5ffff",
+    "axis": { "labelFont": "sans-serif", "titleFont": "sans-serif" }
+  }
+}
