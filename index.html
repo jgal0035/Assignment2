@@ -2,44 +2,168 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
-  <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
-  <title>Tourism in Australia</title>
-</head>
-<body>
-  <div class="page-container">
-    <h2 style="text-align:center; margin: 20px;">Tourism in Australia</h2>
 
-    <div class="toolbar">
-      <span id="region-select"></span> 
+  <!-- Import pure.css -->
+     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css"
+    integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+
+  <!-- Google font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+  <!-- CSS file -->
+  <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+  
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="pure-g">
+    <div class="pure-u-1" style="text-align: center">
+        <h1><b>Tourism in Australia</b></h1>
+      </div>
     </div>
 
-    <div id="vis-map" class="vis-block"></div>
-    <div id="vis-arrivals" class="vis-block"></div>
-    <div id="vis-purpose" class="vis-block"></div>
+    <div class="pure-g">
+    <div class="pure-u-1" style="margin-top: -40px">
+        <p>Tourism is one of the most important drivers of 
+          the Australian economy, attracting millions of domestic and 
+          international visitors every year. This dashboard provides an overview of 
+          tourism activity across Australia, highlighting trends in travel, popular destinations, 
+          and the purposes of trips.</p>
+                  <p> ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- </p>
+
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1">
+      <div class="description description-left">
+        <h2>Number of trips per city (1998 - 2016)</h2>
+          <p>
+            This visualization shows the distribution of trips by city across Australia, each circle 
+            represents a city, and the size of the circle corresponds 
+            to the total number of trips. Larger circles indicate
+             cities that attract a higher volume of tourists, such as Sydney and Melbourne,
+              while smaller circles highlight destinations with more limited but still notable tourism activity.
+        </p>
+
+          <span id="region-select"></span>
+
+        </div>
+    </div>
+      <div class="pure-u-1">
+                <div id="vis-map" class="vis-container"></div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+    <div class="pure-g">
+  <div class="pure-u-1">
+    <div class="description description-left" style="margin-top: 40px">
+      <h2>International arrivals and departures</h2>
+      <p>On this visualization we can compare the international arrivals and 
+        departures from October 2015 to April 2025. The blue 
+        line represents arrivals, while the orange line represents departures.</p>
+    </div>
   </div>
 
-  <script type="text/javascript">
-    let mapView, barView;
+  <div class="pure-u-1">
+    <div id="vis-line" class="vis-container"></div>
+  </div>
 
-    vegaEmbed('#vis-map', 'js/map_vis.json').then(({view}) => {
-      mapView = view;
+</div>
+    <div class="description description-left">
+        <p>For most of the period before 2020, arrivals and departures followed a 
+        similar seasonal pattern, with small fluctuations of travelers per month. 
+        Then in 2020 a big drop occured, reflecting the impact of the 
+        Covid 19 pandemic and border closures. Travel remained near zero for over a year, 
+        before gradually recovering from 2021 onwards. By 2023, both arrivals and departures showed strong growth, 
+        reaching levels similar to the pre pandemic period</p>
+        <p>     </p>
+        <p> ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- </p>
+    </div>
 
-      mapView.addSignalListener('Region_selection', (_, value) => {
-        if (barView) {
-          barView.signal('Region_selection', value).run();
-        }
+
+
+
+
+
+    <div class="pure-g">
+      <div class="pure-u-1">
+      <div class="pure-u-1">
+        <div class="description description-right" style="margin-top: 40px;" >
+          <h2>Purpose of the trip</h2>
+          <p>Understanding why people travel to Australia is essential 
+            for analyzing the tourism industry. Different purposes of travel 
+            such as holidays, visiting relatives, or business, highlight the 
+            diverse roles that tourism plays in the economy and society. 
+            Looking at the breakdown of trip purposes helps identify which 
+            segments are the most significant and how they contribute to overall travel demand.</p>
+        </div>
+              <div class="pure-u-1">
+        <div id="vis-bars" class="vis-container"></div>
+      </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="pure-g">
+      <div class="pure-u-1 small-font" style="margin-top: 60px;">
+                <p> ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- </p>
+
+        <p>A visualisation by Jorge Galvan</p>
+        <p>Date: 13/Oct/2025</p>
+        <p>Data from: https://www.abs.gov.au/statistics/industry/tourism-and-transport </p>
+        <p>https://www.kaggle.com/datasets/luisblanche/quarterly-tourism-in-australia?resource=download&select=tourism.csv </p>
+        <p>https://simplemaps.com/data/au-cities </p>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <script>
+    let barView;
+    vegaEmbed('#vis-map', 'js/map_vis.json', {actions:false}).then(({view}) => {
+      view.addSignalListener('Region_selection', (_, v) => {
+        if (barView) barView.signal('Region_selection', v).run();
       });
-    }).catch(console.error);
+    });
 
-    vegaEmbed('#vis-arrivals', 'js/arrivals_departures.json')
-      .catch(console.error);
+    vegaEmbed('#vis-line', 'js/arrivals_departures.json', {actions:false});
 
-    vegaEmbed('#vis-purpose', 'js/trips_by_purpose.json').then(({view}) => {
+    vegaEmbed('#vis-bars', 'js/trips_by_purpose.json', {actions:false}).then(({view}) => {
       barView = view;
-    }).catch(console.error);
+    });
+
+    vegaEmbed('#vis-wide', 'js/arrivals_departures.json', {actions:false});
   </script>
 </body>
 </html>

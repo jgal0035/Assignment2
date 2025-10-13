@@ -1,9 +1,20 @@
-body { margin:0; font-family:sans-serif; background:#eaf5ff; }
-.page-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px;
-  text-align: center;
+body { background:#eaf5ffff; }
+body * { font-family: 'Open Sans', sans-serif; }
+
+.page {
+  max-width: 1000px;
+  background:#eaf5ffff;
+  margin: 24px auto;
+  padding: 32px;
 }
-.toolbar { display:flex; gap:.5rem; align-items:center; justify-content:center; margin-bottom: 8px; }
-.vis-block { margin: 18px auto; }
+
+h1 { margin: 0 0 8px; }
+.pure-g { margin-bottom: 28px; }
+
+.vis-container { width: 100%; }
+
+.description h2, h1 { margin-top: 0; }
+.description-left { padding-right: 16px; }
+.description-right { padding-left: 16px; }
+
+.small-font { font-size: 14px; color:#555; }

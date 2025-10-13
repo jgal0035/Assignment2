@@ -1,9 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "title": {"text": "Overseas Arrivals and Departures (Monthly)", "fontSize": 18},
-  "width": 800,
+  "width": "container",
   "height": 500,
+  "autosize": { "type": "fit", "contains": "padding" },
 
   "data": { "url": "data/arrivalsDepartures.csv" },
 

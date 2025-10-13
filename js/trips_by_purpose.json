@@ -5,9 +5,11 @@
     { "name": "Region_selection", "value": null }
   ],
 
-  "title": { "text": "Trips by Purpose", "fontSize": 18 },
-  "width": 800,
-  "height": 320,
+  "width": "container",
+    "height": 450,
+
+  "autosize": { "type": "fit", "contains": "padding" },
+
 
   "data": { "url": "data/tourism.csv" },
 
