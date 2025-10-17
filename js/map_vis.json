@@ -16,7 +16,8 @@
 
   "width": "container",
     "height": 600,
-  "autosize": { "type": "fit", "contains": "padding" },
+  "autosize": { "type": "fit", 
+                  "contains": "padding" },
   "projection": { "type": "equirectangular", "center": [133, -27], "scale": 900 },
 
   "layer": [
@@ -39,6 +40,9 @@
                 "fill": null, 
                 "stroke": "#4e4e4e" }
     },
+
+
+
     {
       "data": { "url": "data/tourism.csv" },
       "transform": [
@@ -57,10 +61,15 @@
         },
         { "filter": "Region_selection == null || datum.Region == Region_selection" }
       ],
+
+
+
       "mark": { "type": "circle", "opacity": 0.9, "tooltip": true},
       "encoding": {
-        "longitude": { "field": "lon", "type": "quantitative" },
-        "latitude":  { "field": "lat", "type": "quantitative" },
+        "longitude": { "field": "lon", 
+                        "type": "quantitative" },
+        "latitude":  { "field": "lat", 
+                        "type": "quantitative" },
         "size": {
           "field": "sum_Trips",
           "type": "quantitative",
@@ -96,8 +105,10 @@
       ],
       "mark": { "type": "text", "dx": 8, "dy": -8, "fontSize": 12, "fontStyle": "italic" },
       "encoding": {
-        "longitude": { "field": "lon", "type": "quantitative" },
-        "latitude":  { "field": "lat", "type": "quantitative" },
+        "longitude": { "field": "lon", 
+                        "type": "quantitative" },
+        "latitude":  { "field": "lat", 
+                        "type": "quantitative" },
         "text": { "field": "Region" },
         "color": { "value": "black" },
         "opacity": {

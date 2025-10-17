@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
   "width": "container",
-  "height": 500,
+  "height": 300,
   "autosize": { "type": "fit", "contains": "padding" },
 
   "data": { "url": "data/arrivalsDepartures.csv" },
@@ -19,20 +19,44 @@
     {
       "mark": { "type": "line", "interpolate": "monotone", "strokeWidth": 2 },
       "encoding": {
-        "x": { "field": "t", "type": "temporal", "title": "", "axis": { "format": "%b %Y", "labelOverlap": true } },
-        "y": { "field": "millions", "type": "quantitative", "title": "Millions" },
-        "color": { "field": "Series", "type": "nominal", "title": null },
+        "x": { "field": "t", 
+                "type": "temporal", 
+                "title": "", 
+                "axis": { "format": "%b %Y", 
+                "labelOverlap": true , "grid": false} 
+                 },
+        
+        "y": { "field": "millions", 
+                "type": "quantitative", 
+                "title": "Millions"
+             },
+                
+                "color": { "field": "Series", 
+                            "type": "nominal", 
+                            "title": null },
+                
         "tooltip": [
-          { "field": "t", "type": "temporal", "title": "Month", "format": "%b %Y" },
-          { "field": "Series", "type": "nominal" },
-          { "field": "millions", "type": "quantitative", "title": "Value (Millions)", "format": ".2f" }
+          { "field": "t", 
+              "type": "temporal", 
+              "title": "Month", 
+              "format": "%b %Y" },
+          { "field": "Series", 
+            "type": "nominal" },
+          { "field": "millions", 
+            "type": "quantitative", 
+            "title": "Value (Millions)", 
+            "format": ".2f" }
         ]
       }
     },
     {
-      "mark": { "type": "circle", "opacity": 1, "size": 0 },
+      "mark": { "type": "circle", 
+                "opacity": 1, 
+                "size": 0 },
       "encoding": {
-        "color": { "field": "Series", "type": "nominal", "legend": { "orient": "bottom" } }
+        "color": { "field": "Series", 
+                    "type": "nominal", 
+                    "legend": { "orient": "bottom" } }
       }
     }
   ],
