@@ -1,42 +1,60 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "params": [
-    { "name": "Region_selection", "value": null }
-  ],
+"params": [
+  {
+    "name": "Year_selection",
+    "value": "All",
+    "bind": {
+      "name": "Year: ",                     
+      "input": "select",
+      "element": "#year-select",    
+      "options": ["All",1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016],
+      "labels": ["All Years","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016"]
+    }
+  }
+],
 
   "width": "container",
-    "height": 450,
-
+  "height": 450,
   "autosize": { "type": "fit", "contains": "padding" },
-
 
   "data": { "url": "data/tourism.csv" },
 
   "transform": [
-    { "filter": "Region_selection == null || datum.Region == Region_selection" }
+    { "calculate": "year(datum.Quarter)", "as": "Year" },
+    { "calculate": "Year_selection == 'All' ? 'All' : toString(datum.Year)", "as": "YearKey" },
+    {
+      "aggregate": [
+        { "op": "sum", "field": "Trips", "as": "TripsSum" }
+      ],
+      "groupby": ["Purpose", "YearKey"]
+    },
+    { "filter": "datum.YearKey == (Year_selection == 'All' ? 'All' : toString(Year_selection))" }
   ],
 
   "mark": { "type": "bar", "tooltip": true },
 
   "encoding": {
-    "x": {
+    "y": {
       "field": "Purpose",
       "type": "nominal",
-      "title": "Purpose of trip",
-      "sort": "y"
+      "title": null,
+      "sort": "-x"
     },
-    "y": {
-      "aggregate": "sum",
-      "field": "Trips",
-      "type": "quantitative",
-      "title": "Trips"
-    },
-    "color": { "field": "Purpose", "type": "nominal", "legend": null },
-    
+    "x": {
+  "field": "TripsSum",
+  "type": "quantitative",
+  "title": "Trips",
+  "axis": { "format": "~s", "tickCount": 6 },
+  "scale": { "nice": true }
+}
+,
+    "color": { "field": "Purpose", "type": "nominal", "legend": null},
     "tooltip": [
       { "field": "Purpose", "type": "nominal" },
-      { "aggregate": "sum", "field": "Trips", "type": "quantitative", "title": "Trips", "format": "," }
+      { "field": "TripsSum", "type": "quantitative", "title": "Trips", "format": "," },
+      { "field": "YearKey", "type": "nominal", "title": "Year" }
     ]
   },
 

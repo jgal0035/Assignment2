@@ -8,125 +8,60 @@
 
   "layer": [
     {
-      "data": {
-        "url": "output.json",
-        "format": { "type": "topojson", "feature": "au" }
-      },
+      "data": { "url": "output.json", "format": { "type": "topojson", "feature": "au" } },
       "mark": { "type": "geoshape", "fill": "#337d16be" }
     },
+
     {
-      "data": {
-        "url": "output.json",
-        "format": { "type": "topojson", "feature": "ne_110m_graticules_30" }
-      },
+      "data": { "url": "output.json", "format": { "type": "topojson", "mesh": "au" } },
+      "mark": { "type": "geoshape", "fill": null, "stroke": "#000000", "strokeWidth": 0.8, "strokeOpacity": 0.9 }
+    },
+
+    {
+      "data": { "url": "output.json", "format": { "type": "topojson", "feature": "ne_110m_graticules_30" } },
       "mark": { "type": "geoshape", "fill": null, "stroke": "#4e4e4e", "strokeOpacity": 0.6 }
     },
 
     {
       "data": { "url": "data/tourism.csv" },
       "transform": [
+        { "aggregate": [{ "op": "sum", "field": "Trips", "as": "sum_Trips" }], "groupby": ["Region"] },
+        { "calculate": "datum.Region == 'Tasmania' ? 'Tasmania' : datum.Region", "as": "RegionKey" },
         {
-          "aggregate": [{ "op": "sum", "field": "Trips", "as": "sum_Trips" }],
-          "groupby": ["Region"]
-        },
-        {
-          "calculate": "datum.Region == 'Tasmania' ? 'Tasmania' : datum.Region",
-          "as": "RegionKey"
+          "lookup": "RegionKey",
+          "from": { "data": { "url": "data/worldcities_au.csv" }, "key": "city", "fields": ["lat","lng","country"] },
+          "as": ["lat","lon","country"]
         },
         {
           "lookup": "RegionKey",
-          "from": {
-            "data": { "url": "data/worldcities_au.csv" },
-            "key": "city",
-            "fields": ["lat", "lng", "country"]
-          },
-          "as": ["lat", "lon", "country"]
+          "from": { "data": { "url": "data/worldcities_au.csv" }, "key": "admin_name", "fields": ["lat","lng","country"] },
+          "as": ["lat_admin","lon_admin","country_admin"]
         },
-        {
-          "lookup": "RegionKey",
-          "from": {
-            "data": { "url": "data/worldcities_au.csv" },
-            "key": "admin_name",
-            "fields": ["lat", "lng", "country"]
-          },
-          "as": ["lat_admin", "lon_admin", "country_admin"]
-        },
-        {
-          "calculate": "datum.Region == 'Tasmania' ? datum.lat_admin : datum.lat",
-          "as": "lat_final"
-        },
-        {
-          "calculate": "datum.Region == 'Tasmania' ? datum.lon_admin : datum.lon",
-          "as": "lon_final"
-        }
+        { "calculate": "datum.Region == 'Tasmania' ? datum.lat_admin : datum.lat", "as": "lat_final" },
+        { "calculate": "datum.Region == 'Tasmania' ? datum.lon_admin : datum.lon", "as": "lon_final" }
       ],
-      "mark": { "type": "circle", "opacity": 0.7, "tooltip": true },
+      "mark": { "type": "circle", "opacity": 0.6, "tooltip": true },
       "encoding": {
         "longitude": { "field": "lon_final", "type": "quantitative" },
-        "latitude": { "field": "lat_final", "type": "quantitative" },
+        "latitude":  { "field": "lat_final", "type": "quantitative" },
         "size": {
           "field": "sum_Trips",
           "type": "quantitative",
           "title": "Trips",
-          "scale": { "range": [30, 4000] }
+          "scale": { "range": [30, 4000] },
+          "legend": {
+            "symbolSize": 10,          
+            "symbolStrokeWidth": 0.1, 
+            "labelFontSize": 10,     
+            "titleFontSize": 11       
+  }
+
         },
-        "color": {
-          "field": "sum_Trips",
-          "type": "nominal",
-          "scale": { "scheme": "category20" },
-          "legend": null
-        },
+        "color": { "field": "sum_Trips", "type": "nominal", "scale": { "scheme": "category20" }, "legend": null },
         "tooltip": [
           { "field": "Region", "type": "nominal", "title": "Region" },
           { "field": "sum_Trips", "type": "quantitative", "title": "Trips" }
         ]
-      }
-    },
-
-    {
-      "data": { "url": "data/tourism.csv" },
-      "transform": [
-        {
-          "aggregate": [{ "op": "sum", "field": "Trips", "as": "sum_Trips" }],
-          "groupby": ["Region"]
-        },
-        {
-          "calculate": "datum.Region == 'Tasmania' ? 'Tasmania' : datum.Region",
-          "as": "RegionKey"
-        },
-        {
-          "lookup": "RegionKey",
-          "from": {
-            "data": { "url": "data/worldcities_au.csv" },
-            "key": "city",
-            "fields": ["lat", "lng"]
-          },
-          "as": ["lat", "lon"]
-        },
-        {
-          "lookup": "RegionKey",
-          "from": {
-            "data": { "url": "data/worldcities_au.csv" },
-            "key": "admin_name",
-            "fields": ["lat", "lng"]
-          },
-          "as": ["lat_admin", "lon_admin"]
-        },
-        {
-          "calculate": "datum.Region == 'Tasmania' ? datum.lat_admin : datum.lat",
-          "as": "lat_final"
-        },
-        {
-          "calculate": "datum.Region == 'Tasmania' ? datum.lon_admin : datum.lon",
-          "as": "lon_final"
-        }
-      ],
-      "mark": { "type": "text", "dx": 8, "dy": -8, "fontSize": 12, "fontStyle": "italic" },
-      "encoding": {
-        "longitude": { "field": "lon_final", "type": "quantitative" },
-        "latitude": { "field": "lat_final", "type": "quantitative" },
-        "text": { "field": "Region" },
-        "color": { "value": "black" }
       }
     }
   ],

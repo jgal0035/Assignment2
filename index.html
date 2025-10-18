@@ -45,7 +45,7 @@
 
   <div class="pure-u-1-2" style="padding-left:530px; padding-right:20px; margin-top:-106px;">
     <p style="text-align:justify;">
-      It highlights trends in travel, popular destinations, and the purposes of trips. Tourism generates
+      It shows trends in travel, popular destinations, and the purposes of trips. Tourism generates
       significant income, creates jobs, and strengthens cultural ties with the rest of the world.
     </p>
   </div>
@@ -58,7 +58,7 @@
 
     <div class="pure-g">
       <div class="pure-u-1">
-      <div class="description description-left" >
+      <div class="description" >
         <h2>Number of Trips per City (1998 - 2016)</h2>
 
 
@@ -77,17 +77,15 @@
             cities that attract a higher volume of tourists, such as Sydney and Melbourne,
             while smaller circles highlight destinations with more limited but still notable tourism activity.
           </p>
+          
         </div>
       
       </div>
-        <div class="description" style="margin-top:-40px;">
 
-          <span id="region-select"></span>
-
-        </div>
-    </div>
-      <div class="pure-u-1">
-                <div id="vis-map" class="vis-container"></div>
+    </div class>
+      <div class="pure-u-1" >
+                <div id="vis-map" class="vis-container" ></div>
+                
       </div>
     </div>
         </div>
@@ -161,6 +159,7 @@
           <p>Different purposes of travel such as holidays, visiting relatives, or business, highlight the
             diverse roles that tourism plays in the economy and society.</p>
           <p>Looking at the breakdown of trip purposes helps identify which segments are the most significant and how they contribute to overall travel demand.</p>
+        <span id="year-select"></span>
         </div>
       </div>
 
@@ -180,9 +179,9 @@
           <p style="max-width: 60%; text-align:justify;">
             Tourism activity is not evenly distributed throughout the year. Seasonal patterns play a significant role in shaping when and how people travel, with certain months and quarters consistently attracting more trips.
           </p>
-          <p style= "max-width: 60%; text-align:justify;">A clear seasonal rhythm can be observed, with stronger peaks in Q1 (the first quarter, which includes the Australian summer and holiday season) and Q4 (end-of-year holidays). Quarters Q2 and Q3 tend to record fewer trips in comparison. </p>
+          <p style= "max-width: 60%; text-align:justify;">A clear seasonal pattern can be observed, with stronger peaks in Q1 (the first quarter, which includes the Australian summer and holiday season) and Q4 (end of year holidays). Quarters Q2 and Q3 tend to record fewer trips in comparison. </p>
           
-            <p style="max-width: 60%; text-align:justify;">Over time, the intensity of color also increases, especially toward the later years, reflecting the overall growth in tourism. This visualization highlights both the recurring seasonal cycles and the long-term upward trend in travel demand.</p>
+            <p style="max-width: 60%; text-align:justify;">Over time, the intensity of color also increases, especially toward the later years, reflecting the overall growth in tourism.</p>
           
         </div>
 
@@ -208,7 +207,7 @@
     <div class="pure-u-1-2" style="margin-top: 1px;">
       
       <h2>Top 10 Countries Visiting Australia</h2>
-      <p style="text-align:justify;">This visualisation highlights the top 10 
+      <p style="text-align:justify;">This visualisation shows the top 10 
         countries of origin for visitors to Australia in the last three years.</p>
     </div>
   </div>
@@ -224,14 +223,14 @@
         <div class="pure-u-1-2" style="padding-right:20px; ">
           <p style="text-align:justify;">
       China shows the strongest growth, rising from around 60,000 to nearly 100,000 visitors, 
-      confirming its position as a dominant tourism market. New Zealand remains consistently high,
+      confirming its position as a dominant tourism country. New Zealand remains consistently high,
        with over 110,000 visitors, making it one of the most important and stable sources of travelers
           </p>
         </div>
 
         <div class="pure-u-1-2" style="padding-left:530px; padding-right:20px; margin-top:-124px;">
           <p style="text-align:justify;">
-           Other countries such as UK show steady increases,
+           Other countries such as the UK, show steady increases,
             while countries like Hong Kong and India are growing more gradually 
             but still trending upwards. In contrast, the USA shows a slight decline before 
             recovering toward 2025.
@@ -270,11 +269,7 @@
   <script>
     let barView;
 
-    vegaEmbed('#vis-map', 'js/map_vis.json', {actions:false}).then(({view}) => {
-      view.addSignalListener('Region_selection', (_, v) => {
-        if (barView) barView.signal('Region_selection', v).run();
-      });
-    });
+    vegaEmbed('#vis-map', 'js/map_vis.json', {actions:false});
 
     vegaEmbed('#vis-line', 'js/arrivals_departures.json', {actions:false});
 
@@ -283,6 +278,8 @@
     });
 
     vegaEmbed('#vis-htm', 'js/heatmap.json', {actions:false});
+
+
 
     
     vegaEmbed('#vis-top10', 'js/top10.json', {actions:false});
