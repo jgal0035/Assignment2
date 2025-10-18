@@ -1,0 +1,39 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": 580,
+  "height": 480,
+  "autosize": { "type": "fit", "contains": "padding" },
+
+  "data": { "url": "data/tourism.csv" },
+
+  "mark": "rect",
+
+  "encoding": {
+    "x": {
+      "field": "Quarter",
+      "timeUnit": "quarter",
+      "type": "ordinal",
+      "title": "Quarter"
+    },
+    "y": {
+      "field": "Quarter",
+      "timeUnit": "year",
+      "type": "temporal",
+      "title": "Year",
+      "axis": { "format": "%Y" }
+    },
+    "color": {
+      "aggregate": "sum",
+      "field": "Trips",
+      "type": "quantitative",
+      "title": "Total Trips",
+      "scale": { "scheme": "blues" }
+    }
+  },
+
+  "config": {
+    "background": "#eaf5ffff",
+    "axis": { "labelFont": "Open Sans, sans-serif", "titleFont": "Open Sans, sans-serif" }
+  }
+}

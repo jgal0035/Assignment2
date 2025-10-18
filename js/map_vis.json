@@ -1,57 +1,40 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "params": [
-    {
-      "name": "Region_selection",
-      "value": null,
-      "bind": {
-        "input": "select",
-        "element": "#region-select",
-        "options": [null, "Sydney", "Melbourne"],
-        "labels": ["Show All", "Sydney", "Melbourne"]
-      }
-    }
-  ],
-
   "width": "container",
-    "height": 600,
-  "autosize": { "type": "fit", 
-                  "contains": "padding" },
+  "height": 600,
+  "autosize": { "type": "fit", "contains": "padding" },
   "projection": { "type": "equirectangular", "center": [133, -27], "scale": 900 },
 
   "layer": [
     {
       "data": {
-        "url": "ne_110m.json",
-        "format": { "type": "topojson", 
-                    "feature": "ne_110m_admin_0_countries" }
+        "url": "output.json",
+        "format": { "type": "topojson", "feature": "au" }
       },
-      "mark": { "type": "geoshape", 
-                "fill": "#337d16be" }
+      "mark": { "type": "geoshape", "fill": "#337d16be" }
     },
     {
       "data": {
-        "url": "ne_110m.json",
-        "format": { "type": "topojson", 
-                    "feature": "ne_110m_graticules_30" }
+        "url": "output.json",
+        "format": { "type": "topojson", "feature": "ne_110m_graticules_30" }
       },
-      "mark": { "type": "geoshape", 
-                "fill": null, 
-                "stroke": "#4e4e4e" }
+      "mark": { "type": "geoshape", "fill": null, "stroke": "#4e4e4e", "strokeOpacity": 0.6 }
     },
-
-
 
     {
       "data": { "url": "data/tourism.csv" },
       "transform": [
-        { "aggregate": [{ "op": "sum", 
-                            "field": "Trips", 
-                            "as": "sum_Trips" }], 
-                            "groupby": ["Region"] },
         {
-          "lookup": "Region",
+          "aggregate": [{ "op": "sum", "field": "Trips", "as": "sum_Trips" }],
+          "groupby": ["Region"]
+        },
+        {
+          "calculate": "datum.Region == 'Tasmania' ? 'Tasmania' : datum.Region",
+          "as": "RegionKey"
+        },
+        {
+          "lookup": "RegionKey",
           "from": {
             "data": { "url": "data/worldcities_au.csv" },
             "key": "city",
@@ -59,17 +42,28 @@
           },
           "as": ["lat", "lon", "country"]
         },
-        { "filter": "Region_selection == null || datum.Region == Region_selection" }
+        {
+          "lookup": "RegionKey",
+          "from": {
+            "data": { "url": "data/worldcities_au.csv" },
+            "key": "admin_name",
+            "fields": ["lat", "lng", "country"]
+          },
+          "as": ["lat_admin", "lon_admin", "country_admin"]
+        },
+        {
+          "calculate": "datum.Region == 'Tasmania' ? datum.lat_admin : datum.lat",
+          "as": "lat_final"
+        },
+        {
+          "calculate": "datum.Region == 'Tasmania' ? datum.lon_admin : datum.lon",
+          "as": "lon_final"
+        }
       ],
-
-
-
-      "mark": { "type": "circle", "opacity": 0.9, "tooltip": true},
+      "mark": { "type": "circle", "opacity": 0.7, "tooltip": true },
       "encoding": {
-        "longitude": { "field": "lon", 
-                        "type": "quantitative" },
-        "latitude":  { "field": "lat", 
-                        "type": "quantitative" },
+        "longitude": { "field": "lon_final", "type": "quantitative" },
+        "latitude": { "field": "lat_final", "type": "quantitative" },
         "size": {
           "field": "sum_Trips",
           "type": "quantitative",
@@ -77,53 +71,69 @@
           "scale": { "range": [30, 4000] }
         },
         "color": {
-            "field": "sum_Trips",     
-            "type": "nominal",
-            "scale": { "scheme": "category20" },
-            "legend": null
+          "field": "sum_Trips",
+          "type": "nominal",
+          "scale": { "scheme": "category20" },
+          "legend": null
         },
         "tooltip": [
-          { "field": "Region", "type": "nominal", "title": "City" },
+          { "field": "Region", "type": "nominal", "title": "Region" },
           { "field": "sum_Trips", "type": "quantitative", "title": "Trips" }
         ]
       }
     },
+
     {
       "data": { "url": "data/tourism.csv" },
       "transform": [
-        { "aggregate": [{ "op": "sum", "field": "Trips", "as": "sum_Trips" }], "groupby": ["Region"] },
         {
-          "lookup": "Region",
+          "aggregate": [{ "op": "sum", "field": "Trips", "as": "sum_Trips" }],
+          "groupby": ["Region"]
+        },
+        {
+          "calculate": "datum.Region == 'Tasmania' ? 'Tasmania' : datum.Region",
+          "as": "RegionKey"
+        },
+        {
+          "lookup": "RegionKey",
           "from": {
             "data": { "url": "data/worldcities_au.csv" },
             "key": "city",
-            "fields": ["lat", "lng", "country"]
+            "fields": ["lat", "lng"]
           },
-          "as": ["lat", "lon", "country"]
+          "as": ["lat", "lon"]
         },
-        { "filter": "Region_selection == null || datum.Region == Region_selection" }
+        {
+          "lookup": "RegionKey",
+          "from": {
+            "data": { "url": "data/worldcities_au.csv" },
+            "key": "admin_name",
+            "fields": ["lat", "lng"]
+          },
+          "as": ["lat_admin", "lon_admin"]
+        },
+        {
+          "calculate": "datum.Region == 'Tasmania' ? datum.lat_admin : datum.lat",
+          "as": "lat_final"
+        },
+        {
+          "calculate": "datum.Region == 'Tasmania' ? datum.lon_admin : datum.lon",
+          "as": "lon_final"
+        }
       ],
       "mark": { "type": "text", "dx": 8, "dy": -8, "fontSize": 12, "fontStyle": "italic" },
       "encoding": {
-        "longitude": { "field": "lon", 
-                        "type": "quantitative" },
-        "latitude":  { "field": "lat", 
-                        "type": "quantitative" },
+        "longitude": { "field": "lon_final", "type": "quantitative" },
+        "latitude": { "field": "lat_final", "type": "quantitative" },
         "text": { "field": "Region" },
-        "color": { "value": "black" },
-        "opacity": {
-          "condition": [
-            { "test": "Region_selection != null && datum.Region == Region_selection", "value": 1 },
-            { "test": "Region_selection == null && (datum.Region == 'Sydney' || datum.Region == 'Melbourne')", "value": 1 }
-          ],
-          "value": 0
-        }
+        "color": { "value": "black" }
       }
     }
   ],
 
   "config": {
     "background": "#eaf5ffff",
-    "view": { "fill": "#2f7bffc6", "stroke": null },
-    "legend": { "orient": "right", "labelFontSize": 13, "titleFontSize": 12 }  }
+    "view": { "fill": "#6bcffac6", "stroke": null },
+    "legend": { "orient": "right", "labelFontSize": 13, "titleFontSize": 12 }
+  }
 }

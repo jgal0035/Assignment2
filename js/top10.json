@@ -1,0 +1,60 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": 1000,
+  "height": 420,
+  "autosize": { "type": "fit", "contains": "padding" },
+
+  "data": { "url": "data/top10vis.csv" },
+
+  "transform": [
+    {
+      "fold": ["Aug-23", "Aug-24", "Aug-25"],
+      "as": ["DateStr", "ArrivalsRaw"]
+    },
+    { "calculate": "utcParse(datum.DateStr, '%b-%y')", "as": "t" },
+    { "calculate": "toNumber(replace(datum.ArrivalsRaw, /,/g, ''))/1e3", "as": "Thousands" },
+    { "filter": "isValid(datum.t) && isFinite(datum.Thousands)" }
+  ],
+
+  "mark": { "type": "line", 
+            "interpolate": "monotone", 
+            "strokeWidth": 2.5 },
+
+  "encoding": {
+    "x": {
+      "field": "t",
+      "type": "temporal",
+        "scale": {
+                "domain": [
+                { "year": 2023, "month": 8 },    
+                { "year": 2025, "month": 8 }    
+                ]  },
+      "axis": { "format": "%b %Y", "title": "", "values": [
+                    { "year": 2023, "month": "Aug" },
+                    { "year": 2024, "month": "Aug" },
+                    { "year": 2025, "month": "Aug" }
+                    ], "grid": false}
+    },
+    "y": {
+      "field": "Thousands",
+      "type": "quantitative",
+      "title": "Thousands"
+    },
+    "color": {
+      "field": "Country of Residence",
+      "type": "nominal",
+      "title": null
+    },
+    "tooltip": [
+      { "field": "t", "type": "temporal", "title": "Date", "format": "%b %Y" },
+      { "field": "Country of Residence", "type": "nominal", "title": "Country" },
+      { "field": "Thousands", "type": "quantitative", "title": "", "format": ".2f" }
+    ]
+  },
+
+  "config": {
+    "background": "#eaf5ffff",
+    "axis": { "labelFont": "Open Sans, sans-serif"}
+  }
+}

@@ -42,6 +42,6 @@
 
   "config": {
     "background": "#eaf5ffff",
-    "axis": { "labelFont": "sans-serif", "titleFont": "sans-serif" }
+    "axis": { "labelFont": "sans-serif" }
   }
 }
