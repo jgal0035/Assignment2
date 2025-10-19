@@ -1,20 +1,44 @@
-body { background:rgb(255, 255, 255); }
-body * { font-family: 'Open Sans', sans-serif; }
+body * {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  background: rgb(255, 255, 255);
+}
 
 .page {
   max-width: 1000px;
-  background:#eaf5ffff;
+  background: #eaf5ffff;
   margin: 24px auto;
   padding: 32px;
 }
 
-h1 { margin: 0 0 8px; }
-.pure-g { margin-bottom: 28px; }
+h1 {
+  margin: 0 0 8px;
+}
 
-.vis-container { width: 100%; }
+.pure-g {
+  margin-bottom: 28px;
+}
 
-.description h2, h1 { margin-top: 0; }
-.description-left { padding-right: 16px; }
-.description-right { padding-left: 16px; }
+.vis-container {
+  width: 100%;
+}
 
-.small-font { font-size: 14px; color:#555; }
+.description h2,
+h1 {
+  margin-top: 0;
+}
+
+.description-left {
+  padding-right: 16px;
+}
+
+.description-right {
+  padding-left: 16px;
+}
+
+.small-font {
+  font-size: 14px;
+  color: #555;
+}
